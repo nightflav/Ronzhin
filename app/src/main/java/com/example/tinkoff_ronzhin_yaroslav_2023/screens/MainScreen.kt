@@ -8,15 +8,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -45,29 +47,54 @@ fun MainScreen(
             films = filmUiState.films,
             navigateToFilmDetails = { film ->
                 navController.navigate(route = Screens.Details.screenId + "/${film.filmId}")
-            })
+            }, viewModel)
         is FilmListUiState.Loading -> LoadingScreen()
         is FilmListUiState.Error -> ErrorScreen(viewModel = viewModel)
     }
 }
 
 @Composable
-private fun ListOfFilms(films: List<MyFilm>, navigateToFilmDetails: (MyFilm) -> Unit) {
+private fun ListOfFilms(films: List<MyFilm>, navigateToFilmDetails: (MyFilm) -> Unit, viewModel: AppViewModel) {
+    val uiState by viewModel.uiState.collectAsState()
+
     val orientation = LocalConfiguration.current.orientation
-    LazyColumn(
-        modifier = Modifier.padding(all = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        itemsIndexed(films) { _, film ->
-            if (orientation == Configuration.ORIENTATION_PORTRAIT)
+    if (orientation == Configuration.ORIENTATION_PORTRAIT)
+        LazyColumn(
+            modifier = Modifier.padding(all = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            itemsIndexed(films) { _, film ->
                 FilmItemVertical(
                     film = film,
                     navigateToFilmDetails = navigateToFilmDetails
                 )
-            else
-                FilmItemHorizontal(
-                    film = film, navigateToFilmDetails = navigateToFilmDetails
-                )
+            }
+        }
+    else {
+        Row{
+            Box(
+                modifier = Modifier.weight(1f)
+            ){
+                LazyColumn(
+                    modifier = Modifier.padding(all = 8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    itemsIndexed(films) { _, film ->
+                        FilmItemVertical(
+                            film = film,
+                            navigateToFilmDetails = { viewModel.renewCurrHorFilm(films.indexOf(film)) }
+                        )
+                    }
+                }
+            }
+            Text(
+                text = films[uiState.currHorFilm].description,
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp),
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }
@@ -125,7 +152,8 @@ private fun FilmItemVertical(
                 Spacer(
                     Modifier
                         .height(4.dp)
-                        .background(brush))
+                        .background(brush)
+                )
                 Text(
                     text = film.year,
                     style = MaterialTheme.typography.caption
@@ -139,7 +167,12 @@ private fun FilmItemVertical(
 private fun FilmItemHorizontal(
     film: MyFilm,
     navigateToFilmDetails: (MyFilm) -> Unit = {},
-    brush: Brush = Brush.linearGradient(colors = listOf(Color.White, Color.White))
+    brush: Brush = Brush.linearGradient(
+        colors = listOf(
+            Color.White,
+            Color.White
+        )
+    )
 ) {
     val scroll = rememberScrollState(0)
     Card(
@@ -195,6 +228,7 @@ private fun FilmItemHorizontal(
         }
     }
 }
+
 
 @Composable
 private fun LoadingScreen(modifier: Modifier = Modifier) {
