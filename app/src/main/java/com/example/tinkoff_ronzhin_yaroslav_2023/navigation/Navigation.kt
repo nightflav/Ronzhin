@@ -11,7 +11,6 @@ import com.example.tinkoff_ronzhin_yaroslav_2023.model.AppViewModel
 import com.example.tinkoff_ronzhin_yaroslav_2023.screens.AnimatedSplashScreen
 import com.example.tinkoff_ronzhin_yaroslav_2023.screens.DetailScreen
 import com.example.tinkoff_ronzhin_yaroslav_2023.screens.MainScreen
-import com.example.tinkoff_ronzhin_yaroslav_2023.screens.NoInternetScreen
 
 @Composable
 fun MainNav(
@@ -45,11 +44,6 @@ fun MainNav(
                     viewModel = viewModel
                 )
             }
-        }
-        composable(
-            Screens.LostConnectionScreen.screenId
-        ) {
-            NoInternetScreen(navController = navController)
         }
     }
 }

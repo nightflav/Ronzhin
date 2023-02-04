@@ -1,50 +1,38 @@
 package com.example.tinkoff_ronzhin_yaroslav_2023.model
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tinkoff_ronzhin_yaroslav_2023.data.MyFilm
-import com.example.tinkoff_ronzhin_yaroslav_2023.network.FilmApi
-import kotlinx.coroutines.Deferred
+import com.example.tinkoff_ronzhin_yaroslav_2023.repository.DefaultFilmsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 class AppViewModel : ViewModel() {
 
-    private val _uiState = MutableStateFlow(StateUi())
-    val uiState: StateFlow<StateUi> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(FilmUiState())
+    var filmUiState: FilmListUiState by mutableStateOf(FilmListUiState.Loading)
+        private set
+
+    private val repository = DefaultFilmsRepository()
+
+    fun abs() {
+        filmUiState
+    }
 
     fun loadFilms() {
         viewModelScope.launch {
-            val listFilmsAsync = FilmApi.retrofitServices.getListOfFilmsAsync()
-
-            val filmsList = listFilmsAsync.films
-
-            val extendedFilmsList = filmsList.map { getFilmById(it.filmId) }
-
-            _uiState.update { currentState ->
-                currentState.copy(
-                    films = extendedFilmsList
-                )
+            filmUiState = try {
+                val films = repository.getFilmsList()
+                _uiState.value.films = films
+                FilmListUiState.Success(films)
+            } catch (e: IOException) {
+                FilmListUiState.Error
             }
         }
-    }
-
-    private suspend fun getFilmById(id: Int): MyFilm {
-        val film: MyFilm
-        val filmAsync = FilmApi.retrofitServices.getFilmByIdAsync(id.toString())
-        film = MyFilm(
-            nameRu = filmAsync.nameRu,
-            genres = filmAsync.genres.map { it.genre },
-            countries = filmAsync.countries.map { it.country },
-            description = filmAsync.description,
-            year = filmAsync.year.toString(),
-            posterUrl = filmAsync.posterUrl,
-            filmId = filmAsync.kinopoiskId
-        )
-        return film
     }
 
     fun getFilmWithId(id: Int): MyFilm {

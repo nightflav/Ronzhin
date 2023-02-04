@@ -4,5 +4,4 @@ enum class Screens(val screenId: String) {
     Splash("splash_screen"),
     Main("main_screen"),
     Details("detail_screen"),
-    LostConnectionScreen("lost_connection_screen"),
 }
