@@ -7,8 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -18,7 +18,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -56,12 +55,14 @@ fun MainScreen(
 @Composable
 private fun ListOfFilms(films: List<MyFilm>, navigateToFilmDetails: (MyFilm) -> Unit, viewModel: AppViewModel) {
     val uiState by viewModel.uiState.collectAsState()
+    val scrollState = rememberLazyListState()
 
     val orientation = LocalConfiguration.current.orientation
     if (orientation == Configuration.ORIENTATION_PORTRAIT)
         LazyColumn(
             modifier = Modifier.padding(all = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            state = scrollState
         ) {
             itemsIndexed(films) { _, film ->
                 FilmItemVertical(
@@ -77,7 +78,8 @@ private fun ListOfFilms(films: List<MyFilm>, navigateToFilmDetails: (MyFilm) -> 
             ){
                 LazyColumn(
                     modifier = Modifier.padding(all = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    state = scrollState
                 ) {
                     itemsIndexed(films) { _, film ->
                         FilmItemVertical(

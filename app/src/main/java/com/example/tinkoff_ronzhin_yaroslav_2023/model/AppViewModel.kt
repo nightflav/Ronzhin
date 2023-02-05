@@ -24,20 +24,21 @@ class AppViewModel : ViewModel() {
     private val repository = DefaultFilmsRepository()
 
     fun loadFilms() {
-        viewModelScope.launch {
-            filmUiState = try {
-                val films = repository.getFilmsList()
-                _uiState.value.films = films
-                FilmListUiState.Success(films)
-            } catch (e: IOException) {
-                FilmListUiState.Error
+        if (_uiState.value.films == FilmUiState().films)
+            viewModelScope.launch {
+                filmUiState = try {
+                    val films = repository.getFilmsList()
+                    _uiState.value.films = films
+                    FilmListUiState.Success(films)
+                } catch (e: IOException) {
+                    FilmListUiState.Error
+                }
             }
-        }
     }
 
     fun getFilmWithId(id: Int): MyFilm {
-        for(film in _uiState.value.films)
-            if(id == film.filmId)
+        for (film in _uiState.value.films)
+            if (id == film.filmId)
                 return film
         return _uiState.value.films[0]
     }

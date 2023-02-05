@@ -34,8 +34,6 @@ Sapp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/screens/SplashScree
 Mapp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/ui/theme/Theme.kt,7\3\73aa8cbd2a7ba240992b26abba21bae5cb187790
 |
 Lapp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/ui/theme/Type.kt,9\d\9d361eddedfa9b781fcedf65464d99febcdb463d
-{
-Kapp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/MainActivity.kt,7\3\738260880303e83c736f62cf7dd7577de2103141
 <
 build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
 @
@@ -49,8 +47,18 @@ Mapp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/data/film/Film.kt,
 ‡
 Wapp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/data/filmsJsonParse/Film.kt,c\8\c85e8f754f9c5774cdfef61ef7422333d670fcf6
 ~
-Napp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/network/FilmApi.kt,0\d\0da8a7df8eaaf7d31198799cd2c65bec026601cf
-~
 Napp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/data/film/Genre.kt,c\3\c36a517d9db71bcb516965b7eae08a6855898309
 ˆ
 Xapp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/data/filmsJsonParse/Genre.kt,b\0\b07be58a40b4910b7112e7042d8504739e40ad72
+Œ
+\app/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/data/filmsJsonParse/FilmsList.kt,e\1\e148812630c5ca0d8069dfb23fd3a90cfcefa150
+w
+G.idea/sonarlint/issuestore/7/3/738260880303e83c736f62cf7dd7577de2103141,1\a\1af0695fa2a96714c1293e75a92eea840d13379f
+„
+Tapp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/navigation/Navigation.kt,c\b\cb32ce7c5e8f21d6aaa37db28b3ce9c32cb1c6f5
+‹
+[app/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/navigation/NavigationScreens.kt,0\f\0fa2c5569ad44c867b941df21559ddd9b3a74090
+ƒ
+Sapp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/screens/DetailScreen.kt,a\b\ab12f7d5a9293bbe346276383b5a447e88e4a639
+z
+Japp/src/main/java/com/example/tinkoff_ronzhin_yaroslav_2023/model/State.kt,3\a\3a08a511cdcdeffd3840d3c70db2164101383e2f
