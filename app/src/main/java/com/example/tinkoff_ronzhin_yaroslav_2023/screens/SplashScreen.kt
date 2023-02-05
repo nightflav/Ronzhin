@@ -26,6 +26,7 @@ fun AnimatedSplashScreen(navController: NavController) {
         animationState = true
         delay(2000)
         animationState = false
+        navController.popBackStack()
         navController.navigate(Screens.Main.screenId)
     }
 
