@@ -1,11 +1,14 @@
-package com.example.tinkoff_ronzhin_yaroslav_2023.model
+package com.example.tinkoff_ronzhin_yaroslav_2023.screens.mainScreens
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tinkoff_ronzhin_yaroslav_2023.data.MyFilm
+import com.example.tinkoff_ronzhin_yaroslav_2023.model.FilmListUiState
+import com.example.tinkoff_ronzhin_yaroslav_2023.model.FilmUiState
 import com.example.tinkoff_ronzhin_yaroslav_2023.repository.DefaultFilmsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,25 +31,46 @@ class AppViewModel : ViewModel() {
             viewModelScope.launch {
                 filmUiState = try {
                     val films = repository.getFilmsList()
-                    _uiState.value.films = films
+                    _uiState.update { currState ->
+                        currState.copy(
+                            films = films
+                        )
+                    }
                     FilmListUiState.Success(films)
                 } catch (e: IOException) {
+                    Log.d("MyTag", "SorryBro")
                     FilmListUiState.Error
                 }
             }
-    }
 
-    fun getFilmWithId(id: Int): MyFilm {
-        for (film in _uiState.value.films)
-            if (id == film.filmId)
-                return film
-        return _uiState.value.films[0]
+        Log.d("MyTag", "That is good")
     }
 
     fun renewCurrHorFilm(newId: Int) {
         _uiState.update { currentState ->
             currentState.copy(
                 currHorFilm = newId
+            )
+        }
+    }
+
+    fun updateFilmInFavourites(film: MyFilm) {
+        val newList = _uiState.value.favouriteFilms.toMutableList()
+        if (film in _uiState.value.favouriteFilms)
+            newList.remove(film)
+        else
+            newList.add(film)
+        _uiState.update { currState ->
+            currState.copy(
+                favouriteFilms = newList.toList()
+            )
+        }
+    }
+
+    fun changeCurrSelectedScreen(newScreen: String) {
+        _uiState.update { currState ->
+            currState.copy(
+                currentScreen = newScreen
             )
         }
     }

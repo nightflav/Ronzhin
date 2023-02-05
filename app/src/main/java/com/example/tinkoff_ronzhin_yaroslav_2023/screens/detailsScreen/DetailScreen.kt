@@ -1,7 +1,6 @@
 package com.example.tinkoff_ronzhin_yaroslav_2023.screens
 
 import android.content.res.Configuration
-import com.example.tinkoff_ronzhin_yaroslav_2023.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -9,6 +8,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,21 +19,36 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.tinkoff_ronzhin_yaroslav_2023.R
 import com.example.tinkoff_ronzhin_yaroslav_2023.data.MyFilm
-import com.example.tinkoff_ronzhin_yaroslav_2023.model.AppViewModel
-
+import com.example.tinkoff_ronzhin_yaroslav_2023.model.DetailsUiState
+import com.example.tinkoff_ronzhin_yaroslav_2023.screens.detailsScreen.DetailsScreenViewModel
+import com.example.tinkoff_ronzhin_yaroslav_2023.screens.extraScreens.ErrorScreen
+import com.example.tinkoff_ronzhin_yaroslav_2023.screens.extraScreens.LoadingScreen
 
 @Composable
-fun DetailScreen(navController: NavController, filmId: Int, viewModel: AppViewModel) {
-    val film = viewModel.getFilmWithId(filmId)
+fun DetailScreen(
+    navController: NavController,
+    filmId: Int,
+    viewModel: DetailsScreenViewModel = viewModel()
+) {
+    viewModel.setFilmWithId(filmId)
+    val uiState by viewModel.uiState.collectAsState()
     val orientation = LocalConfiguration.current.orientation
-    FilmDetails(film = film, orientation = orientation, navController = navController)
+    when (viewModel.detailUiState) {
+        is DetailsUiState.Success -> FilmDetails(
+            film = uiState.film,
+            orientation = orientation,
+            navController = navController
+        )
+        is DetailsUiState.Loading -> LoadingScreen()
+        is DetailsUiState.Error -> ErrorScreen(retry = { viewModel.setFilmWithId(filmId) })
+    }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun FilmDetails(film: MyFilm, orientation: Int, navController: NavController) {
     val scroll = rememberScrollState(0)

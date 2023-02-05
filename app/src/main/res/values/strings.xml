@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">tinkoff_ronzhin_yaroslav_2023</string>
-    <string name="genres">Жанры:</string>
-    <string name="countries">Страны:</string>
-    <string name="release_year">Год выпуска:</string>
+    <string name="genres">Жанры</string>
+    <string name="countries">Страны</string>
+    <string name="release_year">Год выпуска</string>
     <string name="internet_error">Ошибка подключения. Попробуйте снова</string>
     <string name="try_again_error_screen">Повторить</string>
 </resources>

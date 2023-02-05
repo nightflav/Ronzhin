@@ -1,21 +1,17 @@
 package com.example.tinkoff_ronzhin_yaroslav_2023.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.tinkoff_ronzhin_yaroslav_2023.model.AppViewModel
 import com.example.tinkoff_ronzhin_yaroslav_2023.screens.AnimatedSplashScreen
 import com.example.tinkoff_ronzhin_yaroslav_2023.screens.DetailScreen
 import com.example.tinkoff_ronzhin_yaroslav_2023.screens.MainScreen
 
 @Composable
-fun MainNav(
-    viewModel: AppViewModel = viewModel()
-) {
+fun MainNav() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screens.Splash.screenId) {
         composable(
@@ -26,10 +22,7 @@ fun MainNav(
         composable(
             Screens.Main.screenId
         ) {
-            MainScreen(
-                navController = navController,
-                viewModel = viewModel
-            )
+            MainScreen(navController)
         }
         composable(
             Screens.Details.screenId + "/{filmId}",
@@ -40,10 +33,10 @@ fun MainNav(
             backStackEntry.arguments?.getInt("filmId")?.let {
                 DetailScreen(
                     navController = navController,
-                    filmId = it,
-                    viewModel = viewModel
+                    filmId = it
                 )
             }
         }
+
     }
 }

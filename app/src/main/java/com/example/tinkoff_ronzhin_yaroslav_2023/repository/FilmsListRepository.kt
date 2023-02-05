@@ -14,7 +14,7 @@ class DefaultFilmsRepository: FilmsListRepository {
         return filmsList.map { getFilmById(it.filmId) }
     }
 
-    private suspend fun getFilmById(id: Int): MyFilm {
+    suspend fun getFilmById(id: Int): MyFilm {
         val film: MyFilm
         val filmAsync = FilmApi.retrofitServices.getFilmByIdAsync(id.toString())
         film = MyFilm(
